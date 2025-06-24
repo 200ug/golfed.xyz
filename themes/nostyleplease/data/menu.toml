@@ -1,0 +1,15 @@
+[[entries]]
+title = "posts"
+    [entries.post_list]
+    limit = 5
+    show_more = true
+    show_more_text = "see more ..."
+    show_more_url = "posts"
+
+[[entries]]
+title = "contacts"
+entries = [
+    { title = "pgp (1530F5...532B3E)", url = "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x1530f5132a1228578d2b4168995efd5c1b532b3e" },
+    { title = "email: hello (at) golfed.xyz" },
+    { title = "signal: xmr.02" },
+]

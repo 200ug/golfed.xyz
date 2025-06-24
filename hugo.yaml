@@ -1,0 +1,25 @@
+baseURL: https://golfed.xyz
+title: Golfed
+language: en-GB
+
+theme: nostyleplease
+
+markup:
+  highlight:
+    codeFences: true
+    noClasses: true
+    style: nord
+
+params:
+  theme_config:
+    appearance: dark
+    back_home_text: <<
+    date_format: 2006-01-02
+    isListGroupByDate: false
+
+  assets:
+    favicon: /images/favicon.ico
+    faviconsvg: /images/favicon.svg
+    favicon96: /images/favicon-96x96.png
+    appleTouchIcon: /images/apple-touch-icon.png
+    manifest: /manifest.json

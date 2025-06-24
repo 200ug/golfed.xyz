@@ -1,0 +1,21 @@
+{
+  "name": "Golfed",
+  "short_name": "Golfed",
+  "icons": [
+    {
+      "src": "/images/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#525252",
+  "background_color": "#525252",
+  "display": "standalone"
+}
