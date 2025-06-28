@@ -228,7 +228,7 @@ Here are a few examples of the results with this configuration (varying color pa
 
 ### Content serving
 
-Now that the banner generator is up and running, it'll initially produce 30 different variations and then every 12 hours replace the oldest one in the output directory to keep the content pool fresh. I added support for multiple sites so that I can use the same generator container for both `golfed.xyz` and `umbrella.haus` by hardcoding their banner directory paths into their respective NGINX configs.
+Now that the banner generator is up and running, it'll initially produce 30 different variations and then every 12 hours replace the oldest one in the output directory to keep the content pool fresh. I also added support for multiple sites so that I could use the same generator container for all landing pages residing on the same server by hardcoding their banner directory paths into their respective NGINX configs.
 
 As I mentioned earlier, I couldn't use NGINX's `random_index` feature and didn't really want to add JS to my site, so I created a simple Alpine container with a script that runs every 5 minutes to rotate the `b.png` file for each site's banner directory so that all NGINX instances could serve their respective version at the `/randban` endpoint:
 

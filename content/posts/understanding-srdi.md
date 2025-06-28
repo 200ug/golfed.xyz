@@ -21,7 +21,7 @@ Shellcode reflective DLL injection (sRDI) still stands as a relatively stealthy 
 
 ## Implementation
 
-The complete implementation can be found from [a Gitea repository](https://git.umbrella.haus/ae/airborne). The following explanations focus on the loader itself as the supporting components (process injector, shellcode generator, and payload) are basically just pasted from existing implementations mentioned in the [references](#references).
+The complete implementation can be found from [Github](https://github.com/200ug/airborne). The following explanations focus on the loader itself as the supporting components (process injector, shellcode generator, and payload) are basically just pasted from existing implementations mentioned in the [references](#references).
 
 The following helper functions are utilized to make the RVA calculations a bit easier to read:
 
@@ -644,7 +644,7 @@ As hinted in the previous sections, the loader utilizes a few trivial obfuscatio
 - XOR encrypted payload shellcode
   - Unique key generated during shellcode generation
 
-If we take a look at the whole [repository](https://git.umbrella.haus/ae/airborne), we can identify the PoC injector (utilizing plain `CreateRemoteThread`) as quite apparent weak link in the chain. Projects like [BypassAV by matro7sh](https://github.com/matro7sh/BypassAV) display a variety of a lot better techniques, if one is interested in improving in that area:
+If we take a look at the complete implementation, we can identify the PoC injector (utilizing plain `CreateRemoteThread`) as quite apparent weak link in the chain. Projects like [BypassAV by matro7sh](https://github.com/matro7sh/BypassAV) display a variety of a lot better techniques, if one is interested in improving in that area:
 
 ![Map of essential AV/EDR bypass methods](/images/understanding-srdi/bypass-av.png)
 
