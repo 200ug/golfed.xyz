@@ -1,11 +1,9 @@
-+++
-title = 'Walkthrough of shellcode reflective DLL injection (sRDI)'
-date = 2023-12-09T20:42:26+02:00
-author = ''
-draft = false
-tags = ['windows', 'srdi']
-categories = ['malware']
-+++
+---
+title: "Walkthrough of shellcode reflective DLL injection (sRDI)"
+date: 2023-12-09T20:42:26+02:00
+draft: false
+tags: ["windows", "srdi"]
+---
 
 Shellcode reflective DLL injection (sRDI) still stands as a relatively stealthy technique in the Windows malware scene despite its age. What differentiates it from simpler DLL injection methods is that it doesn't leave apparent traces to the targeted system's disk, which is why it has a chance to bypass basic defensive solutions relying on e.g. signature detection.
 

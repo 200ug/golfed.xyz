@@ -2,6 +2,7 @@
 title: "Generating website banners algorithmically"
 date: 2025-06-07T11:42:21+03:00
 draft: false
+tags: ["algorithms", "website"]
 ---
 
 If you've ever visited a DNM, you've probably seen that they heavily utilize dynamically generated images in their anti-phishing and anti-botting systems instead of relying on more traditional CAPTCHAs. I've always been fascinated by the ingenious design of these systems as they don't utilize any JavaScript and are definitely less frustrating to use than the mainstream alternatives like reCAPTCHA, hCAPTCHA, or Arkose Labs.

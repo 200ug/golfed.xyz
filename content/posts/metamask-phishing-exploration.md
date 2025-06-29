@@ -1,11 +1,9 @@
-+++
-title = 'Exploring a (poorly made) Telegram-based MetaMask phishing campaign'
-date = 2024-10-27T21:04:50+02:00
-author = ''
-draft = false
-tags = ['phishing']
-categories = ['random']
-+++
+---
+title: "Exploring a (poorly made) Telegram-based MetaMask phishing campaign"
+date: 2024-10-27T21:04:50+02:00
+draft: false
+tags: ["phishing"]
+---
 
 A few days ago, I received a pretty credible-looking MetaMask phishing email stating that my account had been locked due to an attempt to connect a new device to it. I don't use such wallet, but this sparked my interest and I decided to spend a bit of time and look into how the phishing campaign was structured.
 
