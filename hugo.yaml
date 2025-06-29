@@ -6,8 +6,7 @@ theme: nostyleplease
 
 markup:
   highlight:
-    codeFences: true
-    noClasses: true
+    noClasses: false
     style: nord
 
 params:
