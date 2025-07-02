@@ -1,11 +1,7 @@
 {{ define "main" }}
 
 <header>
-    {{ if hugo.IsProduction }}
-        <img id="banner" src="/randban" />
-    {{ else }}
-    
-    {{ end }}
+    <img id="banner" src="/images/banner.png" />
     {{- if $.Site.Params.theme_config.show_description -}}
         <p>{{ $.Site.Params.description }}</p>
     {{- end -}}
