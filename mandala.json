@@ -1,0 +1,33 @@
+{
+  "sites": [
+    {
+      "clearweb_url": "golfed.xyz",
+      "onion_url": "",
+      "color_themes": [
+        "vibrant",
+        "sunset",
+        "ocean",
+        "neon",
+        "cosmic",
+        "midnight",
+        "fire",
+        "pastel",
+        "earth",
+        "ice",
+        "autumn",
+        "cyberpunk",
+        "retro",
+        "monochrome",
+        "tropical",
+        "volcanic",
+        "aurora",
+        "desert",
+        "matrix"
+      ],
+      "max_banners": 1,
+      "banner_width": 600,
+      "banner_height": 120
+    }
+  ],
+  "log_level": 0
+}
