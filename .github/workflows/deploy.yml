@@ -1,14 +1,26 @@
-name: Deploy
+name: Deploy to Pages
 
 on: [push]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# allow only one concurrent deployment, however don't cancel in-progress runs
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           submodules: false
 
@@ -16,22 +28,26 @@ jobs:
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: latest
-          extended: true
+          extended: true # necessary for sass support
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Create CNAME file for custom domain
+        run: |
+          echo "golfed.xyz" > ./static/CNAME
 
       - name: Hugo build
         run: |
           export HUGO_COMMIT_HASH=$(git rev-parse --short HEAD)
-          hugo --minify --gc
+          hugo --minify --gc --baseURL "https://golfed.xyz/"
 
-      - name: Setup SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -p ${{ secrets.PORT }} ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
 
-      - name: Deploy with rsync
-        run: |
-          rsync -avz --delete \
-            -e "ssh -i ~/.ssh/deploy_key -p ${{ secrets.PORT }}" \
-            public/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.REMOTE_PATH }}
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
