@@ -1,18 +1,18 @@
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
 
-clearweb:   golfed.xyz
-onion:      golfed6fzytoktol4de4o4nerap3xuykhfm5makfzscib65df3khnpyd.onion
+golfed.xyz/contact.txt
+
 pgp:        1530F5132A1228578D2B4168995EFD5C1B532B3E
 email:      hello at golfed.xyz
 signal:     xmr.02
 
-updated: 28/06/2025
+updated 03/07/2025
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEARYKAB0WIQQVMPUTKhIoV40rQWiZXv1cG1MrPgUCaGAlAwAKCRCZXv1cG1Mr
-PlWEAQDQQnl+eM2hXB/msU1kQNla7jqlIP8WmDt+OAYjln8cMgD/Ux78+LlFFtS7
-VSeoBehPJ6BUvDtz75ThFlgk+oXL8Qo=
-=OjKI
+iHUEARYKAB0WIQQVMPUTKhIoV40rQWiZXv1cG1MrPgUCaGWnZQAKCRCZXv1cG1Mr
+PpJaAQCJInaRC2t2g0xDpls3SyY0dUlTBPbFEtpnuxRmGMoq6gEAnhMozEgEHUQ1
+loa7hUTjXPojGyTwpWp+oa6wOwkWZw8=
+=2j9O
 -----END PGP SIGNATURE-----
