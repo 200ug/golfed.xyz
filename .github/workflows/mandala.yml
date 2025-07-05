@@ -22,7 +22,7 @@ jobs:
           LATEST_RELEASE=$(curl -s "https://api.github.com/repos/200ug/mandala/releases/latest" | jq -r '.tag_name')
           echo "[+] Latest release: $LATEST_RELEASE"
 
-          curl -L -o mandala "https://github.com/200ug/mandala/releases/download/$LATEST_RELEASE/banner-generator-darwin-arm64"
+          curl -L -o mandala "https://github.com/200ug/mandala/releases/download/$LATEST_RELEASE/mandala-linux-amd64"
           chmod +x mandala
 
       - name: Generate banner
