@@ -1,0 +1,64 @@
+name: Generate website banner
+
+on:
+  schedule:
+    - cron: "0 */6 * * *" # every 6 hours
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-banner:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download mandala binary
+        run: |
+          LATEST_RELEASE=$(curl -s "https://api.github.com/repos/200ug/mandala/releases/latest" | jq -r '.tag_name')
+          echo "[+] Latest release: $LATEST_RELEASE"
+
+          curl -L -o mandala "https://github.com/200ug/mandala/releases/download/$LATEST_RELEASE/banner-generator-darwin-arm64"
+          chmod +x mandala
+
+      - name: Generate banner
+        run: |
+          ./mandala --single --config ./mandala.json --output ./manout
+
+          if [ -f ./manout/golfed.xyz/banner.png ]; then
+            echo "[+] Banner generation successful"
+            mv ./manout/golfed.xyz/banner.png ./static/images/banner.png
+            rm -rf ./manout
+          else
+            echo "[!] Banner generation failed"
+            exit 1
+          fi
+
+      - name: Commit and push banner
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          git add ./static/images/banner.png
+
+          if git diff --staged --quiet; then
+            echo "[!] Git's staging area is empty, nothing to commit"
+          else
+            git commit -m "banner: $(date '+%Y-%m-%d %H:%M:%S')"
+            git push
+
+            echo "[+] Commit pushed"
+            
+            # trigger the deployment workflow
+            curl -X POST \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/200ug/golfed.xyz/actions/workflows/deploy.yml/dispatches" \
+              -d '{"ref":"master"}'
+            
+            echo "[+] Workflow triggered via API"
+          fi
