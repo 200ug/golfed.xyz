@@ -1,6 +1,9 @@
 name: Deploy to Pages
 
-on: [push]
+on:
+  push:
+    brances: ["master"]
+  workflow_dispatch:
 
 permissions:
   contents: read
