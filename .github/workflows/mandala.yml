@@ -2,7 +2,7 @@ name: Generate website banner
 
 on:
   schedule:
-    - cron: "0 */3 * * *" # every 3 hours
+    - cron: "8 0 * * *" # 00:08 daily
   workflow_dispatch:
 
 permissions:
