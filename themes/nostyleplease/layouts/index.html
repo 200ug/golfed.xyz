@@ -1,7 +1,7 @@
 {{ define "main" }}
 
 <header>
-    <img id="banner" src="/images/banner.png" />
+    <img id="banner" src="/images/banner.png?v={{ getenv "HUGO_CACHE_BUST" }}" />
     {{- if $.Site.Params.theme_config.show_description -}}
         <p>{{ $.Site.Params.description }}</p>
     {{- end -}}

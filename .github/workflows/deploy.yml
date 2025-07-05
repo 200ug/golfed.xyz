@@ -44,6 +44,7 @@ jobs:
       - name: Hugo build
         run: |
           export HUGO_COMMIT_HASH=$(git rev-parse --short HEAD)
+          export HUGO_CACHE_BUST=$(date +%s)
           hugo --minify --gc --baseURL "https://golfed.xyz/"
 
       - name: Upload artifact
