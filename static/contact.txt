@@ -5,14 +5,14 @@ golfed.xyz/contact.txt
 
 pgp:        1530F5132A1228578D2B4168995EFD5C1B532B3E
 email:      hello at golfed.xyz
-signal:     xmr.02
+signal:     mix.99
 
-updated 03/07/2025
+updated 10/07/2025
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEARYKAB0WIQQVMPUTKhIoV40rQWiZXv1cG1MrPgUCaGWnZQAKCRCZXv1cG1Mr
-PpJaAQCJInaRC2t2g0xDpls3SyY0dUlTBPbFEtpnuxRmGMoq6gEAnhMozEgEHUQ1
-loa7hUTjXPojGyTwpWp+oa6wOwkWZw8=
-=2j9O
+iHUEARYKAB0WIQQVMPUTKhIoV40rQWiZXv1cG1MrPgUCaG+TYgAKCRCZXv1cG1Mr
+Ppa8AP9lZBN085ik7sRhGI2Y7Ly3dx3OD4imChfRURA6yE06IAD/R/HgLuSKZ223
+5X8w/MHFIcl+Jmsgc6vkocvZCcRuigs=
+=JQ53
 -----END PGP SIGNATURE-----
