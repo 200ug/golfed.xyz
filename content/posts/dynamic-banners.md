@@ -5,27 +5,25 @@ draft: false
 tags: ["algorithms", "website"]
 ---
 
-If you've ever visited a DNM, you've probably seen that they heavily utilize dynamically generated images in their anti-phishing and anti-botting systems instead of relying on more traditional CAPTCHAs. I've always been fascinated by the ingenious design of these systems as they don't utilize any JavaScript and are definitely less frustrating to use than the mainstream alternatives like reCAPTCHA, hCAPTCHA, or Arkose Labs.
+If you've ever visited a DNM, you've probably seen that they heavily utilize dynamically generated images in their anti-phishing and anti-botting systems instead of relying on more traditional CAPTCHAs. I've always been fascinated by the ingenious design of these systems as they don't utilize any JavaScript and are surprisingly often less frustrating to use than the mainstream alternatives like reCAPTCHA, hCAPTCHA, or Arkose Labs.
 
 ![Archetyp Market's anti-phishing banner](/images/dynamic-banners/archetyp.png)
 
-My websites don't have any use for CAPTCHAs like these, but the way these systems dynamically generate images for randomization brought me the idea to implement a similar system to generate randomized banners for the landing page of my site and put my site's clearweb and hidden service URLs into them, as it'd freshen up the look of the site with copyright-free imagery while providing visual variety.
+My websites don't have any use for this kind of anti-phishing resource, but the way these systems dynamically generate images to make scraping and MitM attacks more difficult brought me the idea to implement a similar system to generate randomized banners for the landing page of my site and put my site's clearweb and hidden service URLs into them, as it'd freshen up the look of the site with copyright-free imagery while providing visual variety.
 
 ## Perlin noise algorithm
 
-I didn't know a lot about procedural content generation or its go-to algorithms beforehand, but based on a few searches figured out that Perlin noise could be the way to go for the cohesive and pseudo-random appearance I was looking for. The algorithm is actually quite commonly utilized for procedural terrain generation (2D, 3D, or even 4D), textures, and water/wave simulation in videogames precisely because of the smooth/natural appearance it produces.
+I didn't know a lot about procedural content generation or its go-to algorithms beforehand, but based on a few searches figured out that Perlin noise could be the way to go for the cohesive and pseudo-random appearance I was looking for. The algorithm is actually quite commonly utilized for procedural terrain generation (2D, 3D, or even 4D), textures, and water/wave simulation in video games precisely because of the smooth/natural appearance it produces.
 
 **TL;DR** Perlin noise works by laying a grid over an image. In this grid, a random gradient vector is placed at each corner where the grid lines meet. For any spot in the image, you then look at the four nearest gradient vectors and calculate dot products to determine how much each of them influences that spot -- either by pushing toward it (positive influence) or away from it (negative influence). Smooth interpolation blends these four corner influences without creating harsh edges, unlike what linear interpolation would produce. Finally, multiple grids of different sizes (called octaves) are typically layered together, with large grids creating broad features and small grids adding fine details.
 
 ## Implementation
 
-I wanted to include the following features into the banner generator and then incorporate it into my current HTML + CSS stack:
+I wanted to include the following features in the banner generator and then incorporate it into my current HTML + CSS stack:
 
 - Background generation using [`go-perlin`](https://github.com/aquilax/go-perlin/) with a set of custom color gradient themes
 - Text overlay with randomly picked positioning and coloring
-- Automatic banner rotation: from a total pool of 30 active banners, the oldest would always get replaced every 12 hours
-
-I initially thought that I'd have to include a small JS/PHP snippet to my landing page that'd serve a random banner for each incoming request, but there's actually a dedicated NGINX module called `ngx_http_random_index_module` that can be utilized to serve random files from a directory. Sadly I'm using the `nginx:alpine` Docker image that doesn't support this module by default, so I decided to go for a pseudo-random approach and create an external cron job that'd rotate the banner for NGINX.
+- Some kind of automated rotation system either from a pool of "active" banners or just a simple scheduled task that'd replace the old banner periodically
 
 ### Background generation
 
@@ -229,9 +227,7 @@ Here are a few examples of the results with this configuration (varying color pa
 
 ### Content serving
 
-Now that the banner generator is up and running, it'll initially produce 30 different variations and then every 12 hours replace the oldest one in the output directory to keep the content pool fresh. I also added support for multiple sites so that I could use the same generator container for all landing pages residing on the same server by hardcoding their banner directory paths into their respective NGINX configs.
-
-As I mentioned earlier, I couldn't use NGINX's `random_index` feature and didn't really want to add JS to my site, so I created a simple Alpine container with a script that runs every 5 minutes to rotate the `b.png` file for each site's banner directory so that all NGINX instances could serve their respective version at the `/randban` endpoint:
+The reason why I initially settled on a design that'd keep a separate daemon running and maintain a pool of n different banners replacing the oldest one of them every 12 hours or so was that my whole infra setup was containerized with Docker. It was simple to just spin up a new Alpine container which would have the daemon running and have a common volume with the NGINX container where the randomly picked `b.png` would get served:
 
 ```bash
 #!/usr/bin/env sh
@@ -270,9 +266,78 @@ location /randban {
 }
 ```
 
+Afterwards I've migrated my site to Github Pages, which meant that instead of having an always-on daemon running in the background I had to utilize Github Actions to run the binary in "portable mode" once a day:
+
+```yaml
+name: Generate website banner
+
+on:
+  schedule:
+    - cron: "8 0 * * *" # 00:08 daily
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-banner:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download mandala binary
+        run: |
+          LATEST_RELEASE=$(curl -s "https://api.github.com/repos/200ug/mandala/releases/latest" | jq -r '.tag_name')
+          echo "[+] Latest release: $LATEST_RELEASE"
+
+          curl -L -o mandala "https://github.com/200ug/mandala/releases/download/$LATEST_RELEASE/mandala-linux-amd64"
+          chmod +x mandala
+
+      - name: Generate banner
+        run: |
+          ./mandala --single --config ./mandala.json --output ./manout
+
+          if [ -f ./manout/golfed.xyz/banner.png ]; then
+            echo "[+] Banner generation successful"
+            mv ./manout/golfed.xyz/banner.png ./static/images/banner.png
+            rm -rf ./manout
+          else
+            echo "[!] Banner generation failed"
+            exit 1
+          fi
+
+      - name: Commit and push banner
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          git add ./static/images/banner.png
+
+          if git diff --staged --quiet; then
+            echo "[!] Git's staging area is empty, nothing to commit"
+          else
+            git commit -m "banner: $(date '+%Y-%m-%d %H:%M:%S')"
+            git push
+
+            echo "[+] Commit pushed"
+            
+            # trigger the deployment workflow
+            curl -X POST \
+              -H "Authorization: token ${{ secrets.WORKFLOW_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/200ug/golfed.xyz/actions/workflows/deploy.yml/dispatches" \
+              -d '{"ref":"master"}'
+            
+            echo "[+] Workflow triggered via API"
+          fi
+```
+
 ### Performance
 
-In practice there isn't really need to worry about performance if we're anyway going to keep the rotation interval in hours, but here's some benchmarks run on Apple M3 with [`hyperfine`](https://github.com/sharkdp/hyperfine) anyway.
+In practice there isn't really need to worry about performance if we're going to keep the rotation interval in hours, but here's anyway some benchmarks of the origianl implementation run on Apple M3 with [`hyperfine`](https://github.com/sharkdp/hyperfine):
 
 ```shell
 $ hyperfine './mandala --portable 500'
