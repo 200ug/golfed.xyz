@@ -266,7 +266,7 @@ location /randban {
 }
 ```
 
-Afterwards I've migrated my site to Github Pages, which meant that instead of having an always-on daemon running in the background I had to utilize Github Actions to run the binary in "portable mode" once a day:
+Since then I've migrated my site to Github Pages, which meant that instead of having an always-on daemon running in the background I had to utilize Github Actions to run the binary in "portable mode" once a day to refresh the banner:
 
 ```yaml
 name: Generate website banner
@@ -291,8 +291,6 @@ jobs:
       - name: Download mandala binary
         run: |
           LATEST_RELEASE=$(curl -s "https://api.github.com/repos/200ug/mandala/releases/latest" | jq -r '.tag_name')
-          echo "[+] Latest release: $LATEST_RELEASE"
-
           curl -L -o mandala "https://github.com/200ug/mandala/releases/download/$LATEST_RELEASE/mandala-linux-amd64"
           chmod +x mandala
 
@@ -301,7 +299,6 @@ jobs:
           ./mandala --single --config ./mandala.json --output ./manout
 
           if [ -f ./manout/golfed.xyz/banner.png ]; then
-            echo "[+] Banner generation successful"
             mv ./manout/golfed.xyz/banner.png ./static/images/banner.png
             rm -rf ./manout
           else
@@ -322,16 +319,12 @@ jobs:
             git commit -m "banner: $(date '+%Y-%m-%d %H:%M:%S')"
             git push
 
-            echo "[+] Commit pushed"
-            
             # trigger the deployment workflow
             curl -X POST \
               -H "Authorization: token ${{ secrets.WORKFLOW_TOKEN }}" \
               -H "Accept: application/vnd.github.v3+json" \
               "https://api.github.com/repos/200ug/golfed.xyz/actions/workflows/deploy.yml/dispatches" \
               -d '{"ref":"master"}'
-            
-            echo "[+] Workflow triggered via API"
           fi
 ```
 
