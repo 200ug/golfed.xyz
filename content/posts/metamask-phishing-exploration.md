@@ -1,15 +1,15 @@
 ---
-title: "Exploring a (poorly made) Telegram-based MetaMask phishing campaign"
+title: "Dissecting a MetaMask phishing email"
 date: 2024-10-27T21:04:50+02:00
 draft: false
 tags: ["phishing"]
 ---
 
-A few days ago, I received a pretty credible-looking MetaMask phishing email stating that my account had been locked due to an attempt to connect a new device to it. I don't use such wallet, but this sparked my interest and I decided to spend a bit of time and look into how the phishing campaign was structured.
+A few days ago, I received a pretty credible-looking MetaMask phishing email stating that my account had been locked due to an attempt to connect a new device to it. It sparked my interest and I decided to spend a bit of time looking into how the technical side of the whole campaign was structured, and potentially even disrupt it.
 
 ## Email attachment
 
-The attached HTML file `RemovedDevice.html` contained a barebones HTML structure with a bit of JS and a long Base64 encoded string which the attached script would decode and use jQuery to attach it back to the website body.
+The attached HTML file `RemovedDevice.html` contained a barebones HTML structure with a bit of JS and a long Base64 encoded string that'd get decoded and attached back to the HTML body using jQuery.
 
 ```javascript
 $(document).ready(function () {
@@ -34,9 +34,11 @@ function saveFile(name, type, data) {
 }
 ```
 
-The resulting webpage would display 12/15/18/21/24 input fields for a crypto wallet seed phrases of various lengths.
+The resulting page would display 12/15/18/21/24 input fields for crypto wallet seed phrases of varying lengths.
 
-The backend of this campaign relied on Telegram, and to my surprise the utilized API token and chat ID weren't obfuscated in any way. Also the fact that the comments were still present in the source code indicate that the campaign was just pasted from a public template. The visible chat ID tells us that the data was being exfiltrated into a private chat as Telegram's supergroup and channel IDs would have a `-100` prefix.
+The backend of this campaign relied on Telegram, and as usual neither the API token nor the chat ID were even attempted to be obfuscated. This could be tied to the fact that even the template usage information was still present in the source code :^\)
+
+Telegram's chat IDs are structured in a way where supergroups and channels always have IDs with `-100` prefix, so it was straightforward to determine that this campaign's data was being exfiltrated into a private chat.
 
 ```javascript
 // Add your telegram token,chatid
@@ -44,7 +46,7 @@ const token = "7686154983:AAFtpdY6iTjT7UiTK6cXh0fM2T4CKfjRHl0";
 const chatId = "7839331161";
 ```
 
-Before sending the collected information to the Telegram chat, the JavaScript code would also make a quick GET request to get the victim's public IP and related location data. I couldn't really figure out the point of this as MetaMask is a self-custodial wallet and doesn't utilize any kind of fraud prevention system that could stop the attacker from draining the targeted account if their geolocation didn't match with the wallet's owner.
+Before sending the gathered information to the chat, the JS snippet would also make a quick GET request to get the victim's public IP and related location data. I couldn't really figure out the point of this as MetaMask is a self-custodial wallet and doesn't utilize any kind of fraud prevention system that could stop the attacker from draining the targeted account if their geolocation didn't match the wallet's owner.
 
 ```javascript
 wordForm1.addEventListener("submit", (e) => {
@@ -95,7 +97,7 @@ wordForm1.addEventListener("submit", (e) => {
 
 ## Greetings
 
-Using the visible API token and chat ID I was able to find out a bit more about the bot itself via a `getMe` request and even send out randomly generated data to make it more difficult to detect any working seed phrases from large amount of responses:
+Using the API token and the chat ID I was able to find out a bit more information about the bot itself via a `getMe` request and even flood the operator's inbox with randomly generated data to make it more difficult to detect any actual seed phrases from a large amount of made-up responses:
 
 ```json
 {
@@ -153,6 +155,6 @@ while True:
     sleep(random.randint(1, 10))
 ```
 
-I left the bot running in a Docker container for some time, and in the end I was able to send roughly 10k messages before the campaign operator revoked the API token.
+I left the bot running in a Docker container for some time, and in the end I was able to send roughly 10k messages before the operator revoked the API token. The whole campaign was ruined at this point as the original token was hardcoded into the attachment, and replacing it in the already-sent emails wouldn't be possible.
 
-Next time I get a cryptocurrency related phishing email like this, I'd like to try tracking the stolen funds by giving out the seed phrase of a fresh wallet with e.g. $5-10 USD worth of funds inside and see what kind of anti-forensic methods would the attacker utilize (although given the quality of this campaign, they'd probably just deposit immediately into a full-KYC CEX).
+Next time I get a cryptocurrency-related phishing email like this, I'd like to try tracking the stolen funds by giving out the seed phrase of a fresh wallet with e.g. $5-10 USD worth of funds inside and see what kind of anti-forensic methods the attacker would utilize (although given the quality of this campaign, they'd probably just deposit immediately into a full-KYC CEX).
