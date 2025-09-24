@@ -1,3 +1,14 @@
 <footer class="site-footer">
-    <a href="/contact.txt" target="_blank" rel="noopener noreferrer">contact.txt</a> {{ if getenv "HUGO_COMMIT_HASH" }} / <a href="https://github.com/200ug/golfed.xyz" target="_blank" rel="noopener noreferrer">{{ getenv "HUGO_COMMIT_HASH" }}</a>{{ end }}</p>
+  <p>
+    <a href="/contact.txt" target="_blank" rel="noopener noreferrer"
+      >contact.txt</a
+    >
+    {{ if getenv "HUGO_COMMIT_HASH" }} /
+    <a
+      href="https://github.com/200ug/golfed.xyz"
+      target="_blank"
+      rel="noopener noreferrer"
+      >{{ getenv "HUGO_COMMIT_HASH" }}</a
+    >{{ end }}
+  </p>
 </footer>
