@@ -1,8 +1,10 @@
 ---
-title: "Generating website banners algorithmically"
+title: "Generating web banners with Perlin noise"
 date: 2025-06-07T11:42:21+03:00
 draft: false
-tags: ["algorithms", "website"]
+tags: ["algorithms", "development"]
+image: "003.png"
+post_number: "003"
 ---
 
 If you've ever visited a DNM, you've probably seen that they heavily utilize dynamically generated images in their anti-phishing and anti-botting systems instead of relying on more traditional CAPTCHAs. I've always been fascinated by the ingenious design of these systems as they don't utilize any JavaScript and are surprisingly often less frustrating to use than the mainstream alternatives like reCAPTCHA, hCAPTCHA, or Arkose Labs.
@@ -15,19 +17,19 @@ My websites don't have any use for this kind of anti-phishing resource, but the 
 
 I didn't know a lot about procedural content generation or its go-to algorithms beforehand, but based on a few searches figured out that Perlin noise could be the way to go for the cohesive and pseudo-random appearance I was looking for. The algorithm is actually quite commonly utilized for procedural terrain generation (2D, 3D, or even 4D), textures, and water/wave simulation in video games precisely because of the smooth/natural appearance it produces.
 
-**TL;DR** Perlin noise works by laying a grid over an image. In this grid, a random gradient vector is placed at each corner where the grid lines meet. For any spot in the image, you then look at the four nearest gradient vectors and calculate dot products to determine how much each of them influences that spot -- either by pushing toward it (positive influence) or away from it (negative influence). Smooth interpolation blends these four corner influences without creating harsh edges, unlike what linear interpolation would produce. Finally, multiple grids of different sizes (called octaves) are typically layered together, with large grids creating broad features and small grids adding fine details.
+TL;DR Perlin noise works by laying a grid over an image. In this grid, a random gradient vector is placed at each corner where the grid lines meet. For any spot in the image, you then look at the four nearest gradient vectors and calculate dot products to determine how much each of them influences that spot -- either by pushing toward it (positive influence) or away from it (negative influence). Smooth interpolation blends these four corner influences without creating harsh edges, unlike what linear interpolation would produce. Finally, multiple grids of different sizes (called octaves) are typically layered together, with large grids creating broad features and small grids adding fine details.
 
 ## Implementation
 
 I wanted to include the following features in the banner generator and then incorporate it into my current HTML + CSS stack:
 
-- Background generation using [`go-perlin`](https://github.com/aquilax/go-perlin/) with a set of custom color gradient themes
+- Background generation using [go-perlin](https://github.com/aquilax/go-perlin/) with a set of custom color gradient themes
 - Text overlay with randomly picked positioning and coloring
 - Some kind of automated rotation system either from a pool of "active" banners or just a simple scheduled task that'd replace the old banner periodically
 
 ### Background generation
 
-Adjusting Perlin's input parameters was a pretty straightforward task through trial and error. The system uses three noise layers: a primary pattern layer scaled to `[0.008, 0.023]` that establishes the overall flow and structure, a medium detail layer scaled to `[0.025, 0.05]` that adds intermediate texture variations, and a fine detail layer scaled to `[0.06, 0.1]` that provides subtle surface complexity. With this configuration, the primary pattern receives 40-80% influence, while medium and fine details contribute 15-40% and 5-20% respectively, ensuring the large-scale structure remains dominant while still providing enough textural variety to filter out most bland, uniform backgrounds without causing too much graining.
+Adjusting Perlin's input parameters was a pretty straightforward task through trial and error. The system uses three noise layers: a primary pattern layer scaled to [0.008, 0.023] that establishes the overall flow and structure, a medium detail layer scaled to [0.025, 0.05] that adds intermediate texture variations, and a fine detail layer scaled to [0.06, 0.1] that provides subtle surface complexity. With this configuration, the primary pattern receives 40-80% influence, while medium and fine details contribute 15-40% and 5-20% respectively, ensuring the large-scale structure remains dominant while still providing enough textural variety to filter out most bland, uniform backgrounds without causing too much graining.
 
 ```go
 for y := range config.BannerHeight {
@@ -330,7 +332,7 @@ jobs:
 
 ### Performance
 
-In practice there isn't really need to worry about performance if we're going to keep the rotation interval in hours, but here's anyway some benchmarks of the origianl implementation run on Apple M3 with [`hyperfine`](https://github.com/sharkdp/hyperfine):
+In practice there isn't really need to worry about performance if we're going to keep the rotation interval in hours, but here's anyway some benchmarks of the origianl implementation run on Apple M3 with [hyperfine](https://github.com/sharkdp/hyperfine):
 
 ```shell
 $ hyperfine './mandala --portable 500'

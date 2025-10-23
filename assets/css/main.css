@@ -1,0 +1,158 @@
+@import "tailwindcss";
+@source "hugo_stats.json";
+
+@font-face {
+  font-family: "UnifrakturMaguntia";
+  src: url("/fonts/UnifrakturMaguntia.woff2") format("woff2");
+}
+
+:root {
+  /* colorschemes (light/dark) */
+  --light-background: #fff;
+  --light-text: #000;
+  --light-accent: #858ba7;
+  --light-hyperlink: #008cff;
+  --light-foreground: #abb1c9;
+
+  --dark-background: #000;
+  --dark-text: #fff;
+  --dark-accent: #242f38;
+  --dark-hyperlink: #008cff;
+  --dark-foreground: #1c252d;
+
+  /* active theme variables (defaults to dark) */
+  --background: var(--dark-background);
+  --text: var(--dark-text);
+  --accent: var(--dark-accent);
+  --hyperlink: var(--dark-hyperlink);
+  --foreground: var(--dark-foreground);
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+/* light theme when checkbox is checked or data-theme is set */
+html:has(#theme-toggle:checked),
+html[data-theme="light"] {
+  --background: var(--light-background);
+  --text: var(--light-text);
+  --accent: var(--light-accent);
+  --hyperlink: var(--light-hyperlink);
+  --foreground: var(--light-foreground);
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--background)] text-[var(--text)] text-lg;
+    font-family: "Optima", "Candara", "Calibri", "Arial", sans-serif;
+  }
+
+  header a,
+  label {
+    @apply mx-4 hover:opacity-70;
+  }
+
+  footer {
+    p {
+      @apply flex flex-wrap justify-center gap-10;
+    }
+
+    a {
+      @apply inline-block hover:opacity-70;
+    }
+  }
+
+  .page-content .wow > .grid {
+    @apply min-w-[90%];
+  }
+
+  .grid article:hover h3 {
+    @apply underline decoration-dashed underline-offset-4;
+  }
+
+  #single-article {
+    h1 {
+      @apply text-3xl font-bold mt-8 mb-4;
+    }
+
+    h2 {
+      @apply text-2xl font-bold mt-6 mb-3;
+    }
+
+    h3 {
+      @apply text-xl font-bold mt-5 mb-2;
+    }
+
+    h4 {
+      @apply text-lg font-bold mt-4 mb-2;
+    }
+
+    h5 {
+      @apply text-base font-bold mt-3 mb-1;
+    }
+
+    h6 {
+      @apply text-base font-bold mt-3 mb-1;
+    }
+
+    img {
+      @apply border-[var(--foreground)] mx-auto block py-4;
+    }
+
+    a {
+      @apply text-[var(--hyperlink)] hover:underline;
+    }
+
+    p,
+    ul,
+    ol,
+    blockquote,
+    pre {
+      @apply my-6;
+    }
+
+    pre {
+      @apply overflow-scroll text-base;
+      background-color: transparent !important;
+    }
+
+    code {
+      @apply p-0;
+      background-color: transparent !important;
+    }
+
+    ul,
+    ol {
+      @apply ml-6;
+    }
+
+    ul li {
+      @apply list-disc;
+    }
+
+    ol li {
+      @apply list-decimal;
+    }
+
+    li {
+      @apply mb-0.5;
+    }
+
+    li ul,
+    li ol {
+      @apply my-0;
+    }
+
+    /* drop caps */
+    h1 + p::first-letter,
+    h2 + p::first-letter,
+    h3 + p::first-letter,
+    h4 + p::first-letter,
+    h5 + p::first-letter,
+    h6 + p::first-letter {
+      font-family: "UnifrakturMaguntia", serif;
+      @apply float-left text-5xl leading-14 pr-2;
+    }
+  }
+}

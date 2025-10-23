@@ -1,21 +1,23 @@
 ---
-title: "Walkthrough of shellcode reflective DLL injection (sRDI)"
+title: "Walkthrough of Rusty sRDI"
 date: 2023-12-09T20:42:26+02:00
 draft: false
-tags: ["windows", "srdi"]
+tags: ["windows", "malware"]
+image: "001.png"
+post_number: "001"
 ---
 
 Shellcode reflective DLL injection (sRDI) still stands as a relatively stealthy technique in the Windows malware scene despite its age. What differentiates it from simpler DLL injection methods is that it doesn't leave apparent traces to the targeted system's disk, which is why it has a chance to bypass basic defensive solutions relying on e.g. signature detection.
 
 ## Steps
 
-1. Execution is passed to the loader from a separate injector, that injects the shellcode containing both loader and payload into the target process's memory space (e.g. with `VirtualAlloc`).
+1. Execution is passed to the loader from a separate injector, that injects the shellcode containing both loader and payload into the target process's memory space (e.g. with VirtualAlloc).
 2. The reflective loader parses the process's `kernel32.dll` to calculate the addresses of the functions required for relocation and execution.
 3. The loader allocates a continuous region of memory to load its own image into.
 4. The loader relocates itself into the allocated memory region with the help of its headers.
 5. The loader resolves the imports and patches them into the relocated image's Import Address Table according to the previously gotten function addresses.
 6. The loader applies appropriate protections on each relocated section.
-7. The loader calls the relocated image's entry point `DllMain` with `DLL_PROCESS_ATTACH`.
+7. The loader calls the relocated image's entry point DllMain with DLL_PROCESS_ATTACH.
 
 ## Implementation
 
@@ -37,7 +39,7 @@ fn rva<T>(base_ptr: *mut u8, offset: usize) -> *const T {
 
 The loading process begins by locating the modules and their exports needed to perform the subsequent stages of the injection. A prime target is `kernel32.dll`, a core module in Windows.
 
-Each Windows thread possesses a Thread Environment Block (TEB), which, among other thread specific data, points to a Process Environment Block (PEB). The PEB contains a `PEB_LDR_DATA` structure, cataloging user-mode modules loaded in the process. Crucially, it also features a `InLoadOrderModuleList` field, that points to a doubly linked list enumerating these modules by their load order:
+Each Windows thread possesses a Thread Environment Block (TEB), which, among other thread specific data, points to a Process Environment Block (PEB). The PEB contains a PEB_LDR_DATA structure, cataloging user-mode modules loaded in the process. Crucially, it also features a InLoadOrderModuleList field, that points to a doubly linked list enumerating these modules by their load order:
 
 ```rust
 #[repr(C)]
@@ -77,7 +79,7 @@ pub struct LDR_DATA_TABLE_ENTRY {
 
 By iterating through this list, we can locate the module we're looking for. This step is pivotal in the process, as it allows us to call necessary functions exported from `kernel32.dll` with indirect function calls.
 
-To illustrate, let's examine a set of functions that locate the PEB and traverse the `InLoadOrderModuleList`. Notably we also hash the strings containing the names of the modules (and the exported functions in the next step) to make static analysis a bit more difficult:
+To illustrate, let's examine a set of functions that locate the PEB and traverse the InLoadOrderModuleList. Notably we also hash the strings containing the names of the modules (and the exported functions in the next step) to make static analysis a bit more difficult:
 
 ```rust
 #[link_section = ".text"]
@@ -119,7 +121,7 @@ unsafe fn get_peb_ptr() -> *mut PEB {
 
 After locating the base address of `kernel32.dll`, our next step is to identify the addresses of the specific functions we need. This requires an understanding of the Windows Portable Executable (PE) file format.
 
-A PE file is structured into various components, including the DOS Header, DOS Stub, NT Headers, and a Section Table, which houses the actual file contents in segments like `.text` and `.data`. Our focus is on the Export Directory located within the NT Headers, a section that lists exported functions and their addresses. We can access the Export Directory by utilizing the `IMAGE_DIRECTORY_ENTRY_EXPORT` offset within the `IMAGE_DATA_DIRECTORY`.
+A PE file is structured into various components, including the DOS Header, DOS Stub, NT Headers, and a Section Table, which houses the actual file contents in segments like `.text` and `.data`. Our focus is on the Export Directory located within the NT Headers, a section that lists exported functions and their addresses. We can access the Export Directory by utilizing the IMAGE_DIRECTORY_ENTRY_EXPORT offset within the IMAGE_DATA_DIRECTORY.
 
 Similar to how we navigated through modules, we now iterate through the Export Directory entries to locate our required functions. This way we're able to bypass the usual API call mechanisms that could trigger security alerts:
 
@@ -180,9 +182,9 @@ unsafe fn get_nt_headers_ptr(module_base_ptr: *mut u8) -> Option<*mut IMAGE_NT_H
 
 ### Allocating memory
 
-Having successfully 'imported' the necessary functions (and storing their pointers into `far_procs` struct), we proceed to allocate memory for our payload shellcode within the target process. This is done using `VirtualAlloc`, with the allocated memory granted RW permissions.
+Having successfully 'imported' the necessary functions (and storing their pointers into far_procs struct), we proceed to allocate memory for our payload shellcode within the target process. This is done using VirtualAlloc, with the allocated memory granted RW permissions.
 
-The payload’s NT Headers contain an `ImageBase` field, indicating the preferred loading address (in which case the imports wouldn't have to be resolved in the later steps). Initially, we can attempt to allocate memory at this address, but if unsuccessfull, we can pass `NULL` as the `lpAddress` parameter to allow `VirtualAlloc` to pick an appropriate location. In the end the specific memory address isn't critical, as the loader will handle any necessary relocations later in the execution process.
+The payload’s NT Headers contain an ImageBase field, indicating the preferred loading address (in which case the imports wouldn't have to be resolved in the later steps). Initially, we can attempt to allocate memory at this address, but if unsuccessfull, we can pass NULL as the lpAddress parameter to allow VirtualAlloc to pick an appropriate location. In the end the specific memory address isn't critical, as the loader will handle any necessary relocations later in the execution process.
 
 The allocation step itself is really simple and only requires the payload size:
 
@@ -251,7 +253,7 @@ unsafe fn allocate_rw_memory(
 
 ### Copying sections
 
-After the allocation, we can proceed to copying the payload PE's sections and headers to the new memory section based on the `NumberOfSections` field of the payload's `IMAGE_FILE_HEADER`:
+After the allocation, we can proceed to copying the payload PE's sections and headers to the new memory section based on the NumberOfSections field of the payload's IMAGE_FILE_HEADER:
 
 ```rust
 #[link_section = ".text"]
@@ -297,7 +299,7 @@ unsafe fn copy_pe(
 
 Most likely the payload won't be loaded into the preferred memory location, thus we need to address the image relocations.
 
-The necessary relocation data resides in the payload's NT Headers, within the Data Directory, specifically at the `IMAGE_DIRECTORY_ENTRY_BASERELOC` index. This base relocation table comprises entries each with a `VirtualAddress` field. We apply the delta, which is the difference between the allocated memory location and the preferred memory location, to these addresses. Additionally, we must factor in the offset specified in each table item:
+The necessary relocation data resides in the payload's NT Headers, within the Data Directory, specifically at the IMAGE_DIRECTORY_ENTRY_BASERELOC index. This base relocation table comprises entries each with a VirtualAddress field. We apply the delta, which is the difference between the allocated memory location and the preferred memory location, to these addresses. Additionally, we must factor in the offset specified in each table item:
 
 ```rust
 #[link_section = ".text"]
@@ -348,7 +350,7 @@ unsafe fn process_relocations(
 
 Now, to ensure the payload functions correctly, we must resolve its external dependencies by processing the import table.
 
-In the DLL's Data Directory, we focus on the `IMAGE_DIRECTORY_ENTRY_IMPORT` index, where the import directory resides. This directory contains an array of `IMAGE_IMPORT_DESCRIPTOR` structures, each representing a DLL from which the module imports functions.
+In the DLL's Data Directory, we focus on the IMAGE_DIRECTORY_ENTRY_IMPORT index, where the import directory resides. This directory contains an array of IMAGE_IMPORT_DESCRIPTOR structures, each representing a DLL from which the module imports functions.
 
 During this step we also utilize shuffling and sleep calls to obfuscate the execution flow. First we shuffle the import descriptors with [Fisher–Yates in-place shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle):
 
@@ -380,7 +382,7 @@ if import_count > 1 && flags.shuffle {
 }
 ```
 
-Then, during the iteration, we call `BCryptGenRandom` with `BCRYPT_RNG_ALG_HANDLE` as `hAlgorithm` parameter to generate a random sleep duration for each iteration:
+Then, during the iteration, we call BCryptGenRandom with BCRYPT_RNG_ALG_HANDLE as hAlgorithm parameter to generate a random sleep duration for each iteration:
 
 ```rust
 if flags.delay {
@@ -408,7 +410,7 @@ unsafe fn get_random(far_procs: &FarProcs) -> Option<u64> {
 }
 ```
 
-These DLLs are loaded into the process's address space using `LoadLibraryA`:
+These DLLs are loaded into the process's address space using LoadLibraryA:
 
 ```rust
 let import_descriptor_ptr: *mut IMAGE_IMPORT_DESCRIPTOR = rva_mut(
@@ -437,11 +439,11 @@ while (*import_descriptor_ptr).Name != 0x0 {
 }
 ```
 
-Next, the we must resolve the addresses of the imported functions, essentially patching the Import Address Table (IAT). This involves utilizing the `OriginalFirstThunk`, the Relative Virtual Address (RVA) of the Import Lookup Table (ILT), which points to an array of `IMAGE_THUNK_DATA64` structures. These structures contain information about the imported functions, either as names or ordinal numbers. The `FirstThunk`, in contrast, represents the IAT's RVA, where resolved addresses are updated. Thunks here serve as vital intermediaries, ensuring the correct linking of function calls within the payload.
+Next, the we must resolve the addresses of the imported functions, essentially patching the Import Address Table (IAT). This involves utilizing the OriginalFirstThunk, the Relative Virtual Address (RVA) of the Import Lookup Table (ILT), which points to an array of IMAGE_THUNK_DATA64 structures. These structures contain information about the imported functions, either as names or ordinal numbers. The FirstThunk, in contrast, represents the IAT's RVA, where resolved addresses are updated. Thunks here serve as vital intermediaries, ensuring the correct linking of function calls within the payload.
 
-In processing these `IMAGE_THUNK_DATA64` structures, we need to distinguish between named and ordinal imports. For ordinal imports, the function address is retrieved via `GetProcAddress` using the ordinal number. For named imports, the function's name is obtained from `IMAGE_IMPORT_BY_NAME`, referenced in the `AddressOfData` field of `IMAGE_THUNK_DATA64`, and its address is resolved likewise.
+In processing these IMAGE_THUNK_DATA64 structures, we need to distinguish between named and ordinal imports. For ordinal imports, the function address is retrieved via GetProcAddress using the ordinal number. For named imports, the function's name is obtained from IMAGE_IMPORT_BY_NAME, referenced in the AddressOfData field of IMAGE_THUNK_DATA64, and its address is resolved likewise.
 
-Once obtained, the function address is written back into the corresponding `FirstThunk` entry, effectively redirecting the payload's function calls to the appropriate addresses:
+Once obtained, the function address is written back into the corresponding FirstThunk entry, effectively redirecting the payload's function calls to the appropriate addresses:
 
 ```rust
 while (*import_descriptor_ptr).Name != 0x0 {
@@ -506,7 +508,7 @@ while (*import_descriptor_ptr).Name != 0x0 {
 
 To ensure the seamless integration and correct functioning of the payload within the target process, setting appropriate memory protections for each relocated section is essential.
 
-This process begins by accessing the Section Header (`IMAGE_SECTION_HEADER`) via the `OptionalHeader` in the NT Header. Once located, we iterate through the payload's sections, gathering essential details such as each section's reference, its RVA, and the size of the data. The necessary modifications to memory protections are determined based on the `Characteristics` field of each section, guiding us to apply the correct security attributes. After that the new protections are applied using `VirtualProtect`, tailored to the specifics of each section:
+This process begins by accessing the Section Header (IMAGE_SECTION_HEADER) via the OptionalHeader in the NT Header. Once located, we iterate through the payload's sections, gathering essential details such as each section's reference, its RVA, and the size of the data. The necessary modifications to memory protections are determined based on the Characteristics field of each section, guiding us to apply the correct security attributes. After that the new protections are applied using VirtualProtect, tailored to the specifics of each section:
 
 ```rust
 #[link_section = ".text"]
@@ -578,7 +580,7 @@ unsafe fn finalize_relocations(
 }
 ```
 
-An important final step for each section is to call `FlushInstructionCache` to ensure the CPU sees the changes made to the memory:
+An important final step for each section is to call FlushInstructionCache to ensure the CPU sees the changes made to the memory:
 
 ```rust
 (far_procs.FlushInstructionCache)(-1, null_mut(), 0);
@@ -604,7 +606,7 @@ pub struct Flags {
 }
 ```
 
-If the `ufn` is true, we'll run user-defined function from within the payload. Otherwise we'll stick to calling the payload's `DllMain` with `DLL_PROCESS_ATTACH`:
+If the ufn is true, we'll run user-defined function from within the payload. Otherwise we'll stick to calling the payload's DllMain with DLL_PROCESS_ATTACH:
 
 ```rust
 if flags.ufn {
@@ -642,7 +644,7 @@ As hinted in the previous sections, the loader utilizes a few trivial obfuscatio
 - XOR encrypted payload shellcode
   - Unique key generated during shellcode generation
 
-If we take a look at the complete implementation, we can identify the PoC injector (utilizing plain `CreateRemoteThread`) as quite apparent weak link in the chain. Projects like [BypassAV by matro7sh](https://github.com/matro7sh/BypassAV) display a variety of a lot better techniques, if one is interested in improving in that area:
+If we take a look at the complete implementation, we can identify the PoC injector (utilizing plain CreateRemoteThread) as quite apparent weak link in the chain. Projects like [BypassAV by matro7sh](https://github.com/matro7sh/BypassAV) display a variety of a lot better techniques, if one is interested in improving in that area:
 
 ![Map of essential AV/EDR bypass methods](/images/understanding-srdi/bypass-av.png)
 

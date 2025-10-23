@@ -1,0 +1,21 @@
+{{ define "main" }}
+  <article id="single-article" class="w-full">
+    <div class="flex justify-between items-center mb-6 mt-[-1em] text-sm">
+      <span>{{ .WordCount }} words</span>
+      <time datetime="{{ .Date }}">
+        {{ .Date.Format "Monday, January 2, 2006" }}
+      </time>
+      <span>{{ .ReadingTime }} min read</span>
+    </div>
+
+    <h1>{{ .Title }}</h1>
+
+    {{ if .Params.toc }}
+      <aside {{ if .Params.tocBorder }}class="toc"{{ end }}>
+        {{ .TableOfContents }}
+      </aside>
+    {{ end }}
+
+    {{ .Content }}
+  </article>
+{{ end }}

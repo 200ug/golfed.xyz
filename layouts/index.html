@@ -1,0 +1,53 @@
+{{ define "main" }}
+  {{ .Content }}
+
+  {{ $paginator := .Paginate (where .Site.RegularPages "Section" "posts") 6 }}
+
+
+  <!-- posts grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4.5 w-full auto-rows-fr">
+    {{ range $paginator.Pages }}
+      <a href="{{ .Permalink }}" class="h-full">
+        <article
+          class="border-1 border-dashed border-[var(--foreground)] p-3.5 rounded-xs hover:border-[var(--accent)] transition-opacity h-full">
+          <h3 class="text-lg font-normal mb-1">{{ .Title }}</h3>
+          <p class="text-sm opacity-60 mb-1">
+            {{ .Date.Format "Monday, January 2, 2006" }}
+          </p>
+          {{ if .Params.image }}
+            <img
+              src="/images/covers/{{ .Params.image }}"
+              class="w-full h-auto border-0 rounded-xs brightness-70 rounded-tr-xl rounded-bl-xl"
+              id="cover-img"
+              alt="{{ .Title }}" />
+          {{ end }}
+        </article>
+      </a>
+    {{ end }}
+  </div>
+
+  <!-- pagination -->
+  {{ if $paginator.HasNext }}
+    <div class="flex items-center justify-end gap-6 w-full mt-12 pr-4 pb-4">
+      {{ if $paginator.HasPrev }}
+        <a
+          href="{{ $paginator.Prev.URL }}"
+          class="text-lg hover:opacity-70 transition-opacity">
+          &lt;
+        </a>
+      {{ else }}
+        <span class="text-lg opacity-30 cursor-not-allowed"> &lt; </span>
+      {{ end }}
+      <span class="text-lg">{{ $paginator.PageNumber }}</span>
+      {{ if $paginator.HasNext }}
+        <a
+          href="{{ $paginator.Next.URL }}"
+          class="text-lg hover:opacity-70 transition-opacity">
+          &gt;
+        </a>
+      {{ else }}
+        <span class="text-lg opacity-30 cursor-not-allowed"> &gt; </span>
+      {{ end }}
+    </div>
+  {{ end }}
+{{ end }}

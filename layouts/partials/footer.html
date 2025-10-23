@@ -1,0 +1,33 @@
+<footer class="text-center">
+  <p class="mb-4 text-base relative flex justify-between">
+    <span>
+      {{ if getenv "HUGO_COMMIT_HASH" }}
+        <a
+          href="https://github.com/200ug/golfed.xyz/commit/{{ getenv "HUGO_COMMIT_HASH" }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          >{{ getenv "HUGO_COMMIT_HASH" }}</a
+        >
+      {{ else }}
+        <!-- placeholder for dev -->
+        <a href="#">fa5b21f</a>
+      {{ end }}
+    </span>
+    <a
+      href="https://kopimi.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="absolute left-1/2 -translate-x-1/2"
+      >∆</a
+    >
+    <span>
+      <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer">sitemap</a>
+    </span>
+  </p>
+  <p class="text-xs text-[var(--accent)] pt-2">
+    ALL IN THE GAME. ALL IN THE GAME, YO.
+  </p>
+  <p class="text-xs text-[var(--accent)]">
+    {{ time.Now | time.Format "Jan 2 2006" }}
+  </p>
+</footer>

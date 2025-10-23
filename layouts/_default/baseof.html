@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="{{ $.Site.LanguageCode }}">
+  {{- partial "head.html" . -}}
+  <body a="{{ $.Site.Params.theme_config.appearance | default "auto" }}">
+    <main class="page-content" aria-label="Content">
+      <div
+        class="w-[900px] max-w-full mx-auto px-[2em] flex flex-col items-center [&>*]:my-6">
+        {{ partial "header.html" }}
+        {{- block "main" . }}{{- end }}
+        {{ partial "footer.html" }}
+      </div>
+    </main>
+  </body>
+</html>
