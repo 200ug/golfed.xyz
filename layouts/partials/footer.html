@@ -6,8 +6,7 @@
           href="https://github.com/200ug/golfed.xyz/commit/{{ getenv "HUGO_COMMIT_HASH" }}"
           target="_blank"
           rel="noopener noreferrer"
-          >{{ getenv "HUGO_COMMIT_HASH" }}</a
-        >
+          >{{ getenv "HUGO_COMMIT_HASH" }}</a>
       {{ else }}
         <!-- placeholder for dev -->
         <a href="#">fa5b21f</a>
@@ -25,7 +24,7 @@
     </span>
   </p>
   <p class="text-xs text-[var(--accent)] pt-2">
-    ALL IN THE GAME. ALL IN THE GAME, YO.
+    ALL IN THE GAME, YO. ALL IN THE GAME.
   </p>
   <p class="text-xs text-[var(--accent)]">
     {{ time.Now | time.Format "Jan 2 2006" }}
