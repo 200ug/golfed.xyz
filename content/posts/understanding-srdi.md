@@ -12,7 +12,7 @@ Shellcode reflective DLL injection (sRDI) still stands as a relatively stealthy 
 ## Steps
 
 1. Execution is passed to the loader from a separate injector, that injects the shellcode containing both loader and payload into the target process's memory space (e.g. with VirtualAlloc).
-2. The reflective loader parses the process's `kernel32.dll` to calculate the addresses of the functions required for relocation and execution.
+2. The reflective loader parses the process's kernel32.dll to calculate the addresses of the functions required for relocation and execution.
 3. The loader allocates a continuous region of memory to load its own image into.
 4. The loader relocates itself into the allocated memory region with the help of its headers.
 5. The loader resolves the imports and patches them into the relocated image's Import Address Table according to the previously gotten function addresses.
@@ -37,7 +37,7 @@ fn rva<T>(base_ptr: *mut u8, offset: usize) -> *const T {
 
 ### Locating modules
 
-The loading process begins by locating the modules and their exports needed to perform the subsequent stages of the injection. A prime target is `kernel32.dll`, a core module in Windows.
+The loading process begins by locating the modules and their exports needed to perform the subsequent stages of the injection. A prime target is kernel32.dll, a core module in Windows.
 
 Each Windows thread possesses a Thread Environment Block (TEB), which, among other thread specific data, points to a Process Environment Block (PEB). The PEB contains a PEB_LDR_DATA structure, cataloging user-mode modules loaded in the process. Crucially, it also features a InLoadOrderModuleList field, that points to a doubly linked list enumerating these modules by their load order:
 
@@ -77,7 +77,7 @@ pub struct LDR_DATA_TABLE_ENTRY {
 }
 ```
 
-By iterating through this list, we can locate the module we're looking for. This step is pivotal in the process, as it allows us to call necessary functions exported from `kernel32.dll` with indirect function calls.
+By iterating through this list, we can locate the module we're looking for. This step is pivotal in the process, as it allows us to call necessary functions exported from kernel32.dll with indirect function calls.
 
 To illustrate, let's examine a set of functions that locate the PEB and traverse the InLoadOrderModuleList. Notably we also hash the strings containing the names of the modules (and the exported functions in the next step) to make static analysis a bit more difficult:
 
@@ -119,9 +119,9 @@ unsafe fn get_peb_ptr() -> *mut PEB {
 
 ### Locating exports
 
-After locating the base address of `kernel32.dll`, our next step is to identify the addresses of the specific functions we need. This requires an understanding of the Windows Portable Executable (PE) file format.
+After locating the base address of kernel32.dll, our next step is to identify the addresses of the specific functions we need. This requires an understanding of the Windows Portable Executable (PE) file format.
 
-A PE file is structured into various components, including the DOS Header, DOS Stub, NT Headers, and a Section Table, which houses the actual file contents in segments like `.text` and `.data`. Our focus is on the Export Directory located within the NT Headers, a section that lists exported functions and their addresses. We can access the Export Directory by utilizing the IMAGE_DIRECTORY_ENTRY_EXPORT offset within the IMAGE_DATA_DIRECTORY.
+A PE file is structured into various components, including the DOS Header, DOS Stub, NT Headers, and a Section Table, which houses the actual file contents in segments like .text and .data. Our focus is on the Export Directory located within the NT Headers, a section that lists exported functions and their addresses. We can access the Export Directory by utilizing the IMAGE_DIRECTORY_ENTRY_EXPORT offset within the IMAGE_DATA_DIRECTORY.
 
 Similar to how we navigated through modules, we now iterate through the Export Directory entries to locate our required functions. This way we're able to bypass the usual API call mechanisms that could trigger security alerts:
 

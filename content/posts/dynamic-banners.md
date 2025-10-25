@@ -229,7 +229,7 @@ Here are a few examples of the results with this configuration (varying color pa
 
 ### Content serving
 
-The reason why I initially settled on a design that'd keep a separate daemon running and maintain a pool of n different banners replacing the oldest one of them every 12 hours or so was that my whole infra setup was containerized with Docker. It was simple to just spin up a new Alpine container which would have the daemon running and have a common volume with the NGINX container where the randomly picked `b.png` would get served:
+The reason why I initially settled on a design that'd keep a separate daemon running and maintain a pool of n different banners replacing the oldest one of them every 12 hours or so was that my whole infra setup was containerized with Docker. It was simple to just spin up a new Alpine container which would have the daemon running and have a common volume with the NGINX container where the randomly picked b.png would get served:
 
 ```bash
 #!/usr/bin/env sh

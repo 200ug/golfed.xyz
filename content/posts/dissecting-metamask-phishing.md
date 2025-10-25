@@ -11,7 +11,7 @@ A few days ago, I received a pretty credible-looking MetaMask phishing email sta
 
 ## Email attachment
 
-The attached HTML file `RemovedDevice.html` contained a barebones HTML structure with a bit of JS and a long Base64 encoded string that'd get decoded and attached back to the HTML body using jQuery.
+The attached HTML file RemovedDevice.html contained a barebones HTML structure with a bit of JS and a long Base64 encoded string that'd get decoded and attached back to the HTML body using jQuery.
 
 ```javascript
 $(document).ready(function () {
