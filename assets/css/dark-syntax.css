@@ -1,45 +1,45 @@
 /* Generated using: hugo gen chromastyles --style=github-dark */
 
 /* Background */
-.bg {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .bg {
   color: #e6edf3;
   background-color: #0d1117;
 }
 /* PreWrapper */
-.chroma {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma {
   color: #e6edf3;
   background-color: #0d1117;
 }
 /* Error */
-.chroma .err {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .err {
   color: #f85149;
 }
 /* LineLink */
-.chroma .lnlinks {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .lnlinks {
   outline: none;
   text-decoration: none;
   color: inherit;
 }
 /* LineTableTD */
-.chroma .lntd {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .lntd {
   vertical-align: top;
   padding: 0;
   margin: 0;
   border: 0;
 }
 /* LineTable */
-.chroma .lntable {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .lntable {
   border-spacing: 0;
   padding: 0;
   margin: 0;
   border: 0;
 }
 /* LineHighlight */
-.chroma .hl {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .hl {
   background-color: #6e7681;
 }
 /* LineNumbersTable */
-.chroma .lnt {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .lnt {
   white-space: pre;
   -webkit-user-select: none;
   user-select: none;
@@ -48,7 +48,7 @@
   color: #737679;
 }
 /* LineNumbers */
-.chroma .ln {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .ln {
   white-space: pre;
   -webkit-user-select: none;
   user-select: none;
@@ -57,296 +57,296 @@
   color: #6e7681;
 }
 /* Line */
-.chroma .line {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .line {
   display: flex;
 }
 /* Keyword */
-.chroma .k {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .k {
   color: #ff7b72;
 }
 /* KeywordConstant */
-.chroma .kc {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .kc {
   color: #79c0ff;
 }
 /* KeywordDeclaration */
-.chroma .kd {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .kd {
   color: #ff7b72;
 }
 /* KeywordNamespace */
-.chroma .kn {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .kn {
   color: #ff7b72;
 }
 /* KeywordPseudo */
-.chroma .kp {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .kp {
   color: #79c0ff;
 }
 /* KeywordReserved */
-.chroma .kr {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .kr {
   color: #ff7b72;
 }
 /* KeywordType */
-.chroma .kt {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .kt {
   color: #ff7b72;
 }
 /* NameClass */
-.chroma .nc {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .nc {
   color: #f0883e;
   font-weight: bold;
 }
 /* NameConstant */
-.chroma .no {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .no {
   color: #79c0ff;
   font-weight: bold;
 }
 /* NameDecorator */
-.chroma .nd {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .nd {
   color: #d2a8ff;
   font-weight: bold;
 }
 /* NameEntity */
-.chroma .ni {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .ni {
   color: #ffa657;
 }
 /* NameException */
-.chroma .ne {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .ne {
   color: #f0883e;
   font-weight: bold;
 }
 /* NameLabel */
-.chroma .nl {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .nl {
   color: #79c0ff;
   font-weight: bold;
 }
 /* NameNamespace */
-.chroma .nn {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .nn {
   color: #ff7b72;
 }
 /* NameProperty */
-.chroma .py {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .py {
   color: #79c0ff;
 }
 /* NameTag */
-.chroma .nt {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .nt {
   color: #7ee787;
 }
 /* NameVariable */
-.chroma .nv {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .nv {
   color: #79c0ff;
 }
 /* NameVariableClass */
-.chroma .vc {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .vc {
   color: #79c0ff;
 }
 /* NameVariableGlobal */
-.chroma .vg {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .vg {
   color: #79c0ff;
 }
 /* NameVariableInstance */
-.chroma .vi {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .vi {
   color: #79c0ff;
 }
 /* NameVariableMagic */
-.chroma .vm {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .vm {
   color: #79c0ff;
 }
 /* NameFunction */
-.chroma .nf {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .nf {
   color: #d2a8ff;
   font-weight: bold;
 }
 /* NameFunctionMagic */
-.chroma .fm {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .fm {
   color: #d2a8ff;
   font-weight: bold;
 }
 /* Literal */
-.chroma .l {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .l {
   color: #a5d6ff;
 }
 /* LiteralDate */
-.chroma .ld {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .ld {
   color: #79c0ff;
 }
 /* LiteralString */
-.chroma .s {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .s {
   color: #a5d6ff;
 }
 /* LiteralStringAffix */
-.chroma .sa {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .sa {
   color: #79c0ff;
 }
 /* LiteralStringBacktick */
-.chroma .sb {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .sb {
   color: #a5d6ff;
 }
 /* LiteralStringChar */
-.chroma .sc {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .sc {
   color: #a5d6ff;
 }
 /* LiteralStringDelimiter */
-.chroma .dl {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .dl {
   color: #79c0ff;
 }
 /* LiteralStringDoc */
-.chroma .sd {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .sd {
   color: #a5d6ff;
 }
 /* LiteralStringDouble */
-.chroma .s2 {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .s2 {
   color: #a5d6ff;
 }
 /* LiteralStringEscape */
-.chroma .se {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .se {
   color: #79c0ff;
 }
 /* LiteralStringHeredoc */
-.chroma .sh {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .sh {
   color: #79c0ff;
 }
 /* LiteralStringInterpol */
-.chroma .si {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .si {
   color: #a5d6ff;
 }
 /* LiteralStringOther */
-.chroma .sx {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .sx {
   color: #a5d6ff;
 }
 /* LiteralStringRegex */
-.chroma .sr {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .sr {
   color: #79c0ff;
 }
 /* LiteralStringSingle */
-.chroma .s1 {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .s1 {
   color: #a5d6ff;
 }
 /* LiteralStringSymbol */
-.chroma .ss {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .ss {
   color: #a5d6ff;
 }
 /* LiteralNumber */
-.chroma .m {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .m {
   color: #a5d6ff;
 }
 /* LiteralNumberBin */
-.chroma .mb {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .mb {
   color: #a5d6ff;
 }
 /* LiteralNumberFloat */
-.chroma .mf {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .mf {
   color: #a5d6ff;
 }
 /* LiteralNumberHex */
-.chroma .mh {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .mh {
   color: #a5d6ff;
 }
 /* LiteralNumberInteger */
-.chroma .mi {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .mi {
   color: #a5d6ff;
 }
 /* LiteralNumberIntegerLong */
-.chroma .il {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .il {
   color: #a5d6ff;
 }
 /* LiteralNumberOct */
-.chroma .mo {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .mo {
   color: #a5d6ff;
 }
 /* Operator */
-.chroma .o {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .o {
   color: #ff7b72;
   font-weight: bold;
 }
 /* OperatorWord */
-.chroma .ow {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .ow {
   color: #ff7b72;
   font-weight: bold;
 }
 /* Comment */
-.chroma .c {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .c {
   color: #8b949e;
   font-style: italic;
 }
 /* CommentHashbang */
-.chroma .ch {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .ch {
   color: #8b949e;
   font-style: italic;
 }
 /* CommentMultiline */
-.chroma .cm {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .cm {
   color: #8b949e;
   font-style: italic;
 }
 /* CommentSingle */
-.chroma .c1 {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .c1 {
   color: #8b949e;
   font-style: italic;
 }
 /* CommentSpecial */
-.chroma .cs {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .cs {
   color: #8b949e;
   font-weight: bold;
   font-style: italic;
 }
 /* CommentPreproc */
-.chroma .cp {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .cp {
   color: #8b949e;
   font-weight: bold;
   font-style: italic;
 }
 /* CommentPreprocFile */
-.chroma .cpf {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .cpf {
   color: #8b949e;
   font-weight: bold;
   font-style: italic;
 }
 /* GenericDeleted */
-.chroma .gd {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .gd {
   color: #ffa198;
   background-color: #490202;
 }
 /* GenericEmph */
-.chroma .ge {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .ge {
   font-style: italic;
 }
 /* GenericError */
-.chroma .gr {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .gr {
   color: #ffa198;
 }
 /* GenericHeading */
-.chroma .gh {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .gh {
   color: #79c0ff;
   font-weight: bold;
 }
 /* GenericInserted */
-.chroma .gi {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .gi {
   color: #56d364;
   background-color: #0f5323;
 }
 /* GenericOutput */
-.chroma .go {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .go {
   color: #8b949e;
 }
 /* GenericPrompt */
-.chroma .gp {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .gp {
   color: #8b949e;
 }
 /* GenericStrong */
-.chroma .gs {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .gs {
   font-weight: bold;
 }
 /* GenericSubheading */
-.chroma .gu {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .gu {
   color: #79c0ff;
 }
 /* GenericTraceback */
-.chroma .gt {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .gt {
   color: #ff7b72;
 }
 /* GenericUnderline */
-.chroma .gl {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .gl {
   text-decoration: underline;
 }
 /* TextWhitespace */
-.chroma .w {
+:is(html:not(:has(#theme-toggle:checked)), html[data-theme="dark"]) .chroma .w {
   color: #6e7681;
 }
