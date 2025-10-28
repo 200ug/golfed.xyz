@@ -1,25 +1,12 @@
-name: Deploy to Pages
+name: Deploy to Cloudflare Pages
 
 on:
   push:
     branches: ["master"]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# allow only one concurrent deployment, however don't cancel in-progress runs
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,9 +18,9 @@ jobs:
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: latest
-          extended: true # necessary for sass support
+          extended: true
 
-      - name: Setup Node.js
+      - name: Node.js setup
         uses: actions/setup-node@v4
         with:
           node-version: "24"
@@ -41,25 +28,15 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v5
-
-      - name: Create CNAME file for custom domain
-        run: |
-          echo "golfed.xyz" > ./static/CNAME
-
       - name: Hugo build
         run: |
           export HUGO_COMMIT_HASH=$(git rev-parse --short HEAD)
           export HUGO_CACHE_BUST=$(date +%s)
           hugo --minify --gc --baseURL "https://golfed.xyz/"
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
         with:
-          path: ./public
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy public --project-name=golfed-xyz
