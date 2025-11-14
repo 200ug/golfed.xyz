@@ -1,21 +1,18 @@
 {{ define "main" }}
-  <article id="single-article" class="w-full">
-    <div class="flex justify-between items-center mb-6 mt-[-1em] text-sm">
-      <span>{{ .WordCount }} words</span>
-      <time datetime="{{ .Date }}">
-        {{ .Date.Format "Monday, January 2, 2006" }}
-      </time>
-      <span>{{ .ReadingTime }} min read</span>
+  <article class="p-6 lg:p-8 max-w-4xl mx-auto">
+    <header class="mb-8">
+      <h1 class="text-3xl lg:text-4xl mb-2">{{ .Title }}</h1>
+      {{ if .Date }}
+        <time
+          class="text-sm text-gray-600"
+          datetime="{{ .Date.Format "2006-01-02" }}">
+          {{ .Date.Format "January 2, 2006" }}
+        </time>
+      {{ end }}
+    </header>
+
+    <div class="article-content prose prose-lg max-w-none">
+      {{ .Content }}
     </div>
-
-    <h1>{{ .Title }}</h1>
-
-    {{ if .Params.toc }}
-      <aside {{ if .Params.tocBorder }}class="toc"{{ end }}>
-        {{ .TableOfContents }}
-      </aside>
-    {{ end }}
-
-    {{ .Content }}
   </article>
 {{ end }}

@@ -1,14 +1,13 @@
 <!doctype html>
-<html lang="{{ $.Site.LanguageCode }}">
-  {{- partial "head.html" . -}}
-  <body a="{{ $.Site.Params.theme_config.appearance | default "auto" }}">
-    <main class="page-content" aria-label="Content">
-      <div
-        class="w-[900px] max-w-full mx-auto px-[2em] flex flex-col items-center [&>*]:my-6">
-        {{ partial "header.html" }}
-        {{- block "main" . }}{{- end }}
-        {{ partial "footer.html" }}
-      </div>
+<html lang="en">
+  <head>
+    {{ partial "head.html" . }}
+  </head>
+  <body class="min-h-screen bg-(--col-bg) text-(--col-text)">
+    <main class="max-w-4xl mx-auto px-4 pt-24">
+      {{ block "main" . }}{{ end }}
     </main>
+
+    {{ partial "footer.html" . }}
   </body>
 </html>

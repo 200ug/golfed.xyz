@@ -1,53 +1,34 @@
 {{ define "main" }}
-  {{ .Content }}
-
-  {{ $paginator := .Paginate (where .Site.RegularPages "Section" "posts") 6 }}
-
-
-  <!-- posts grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4.5 w-full auto-rows-fr">
-    {{ range $paginator.Pages }}
-      <a href="{{ .Permalink }}" class="h-full">
-        <article
-          class="border-1 border-dashed border-[var(--foreground)] p-3.5 rounded-xs hover:border-[var(--accent)] transition-opacity h-full">
-          <h3 class="text-lg font-normal mb-1">{{ .Title }}</h3>
-          <p class="text-sm opacity-60 mb-1">
-            {{ .Date.Format "Monday, January 2, 2006" }}
-          </p>
-          {{ if .Params.image }}
-            <img
-              src="/images/covers/{{ .Params.image }}"
-              class="w-full h-auto border-0 rounded-xs brightness-70 rounded-tr-xl rounded-bl-xl"
-              id="cover-img"
-              alt="{{ .Title }}" />
-          {{ end }}
-        </article>
-      </a>
+  <div class="pb-24">
+    {{ range (.Site.RegularPages.GroupByDate "2006") }}
+      {{ if ne .Key "0001" }}
+        <div class="mb-12">
+          <h1 class="text-2xl font-bold mb-6">{{ .Key }}</h1>
+          <ul class="space-y-2">
+            {{ range .Pages }}
+              <li class="flex items-baseline group px-2">
+                <a href="{{ .RelPermalink }}" class="truncate pr-2"
+                  >{{ .Title }}</a
+                >
+                <span
+                  class="grow border-b border-dotted border-black mx-2"></span>
+                {{ $day := .Date.Day }}
+                {{ $suffix := "th" }}
+                {{ if or (eq $day 1) (eq $day 21) (eq $day 31) }}
+                  {{ $suffix = "st" }}
+                {{ else if or (eq $day 2) (eq $day 22) }}
+                  {{ $suffix = "nd" }}
+                {{ else if or (eq $day 3) (eq $day 23) }}
+                  {{ $suffix = "rd" }}
+                {{ end }}
+                <span class="whitespace-nowrap pl-2"
+                  >{{ .Date.Format "Jan 2" }}{{ $suffix }}</span
+                >
+              </li>
+            {{ end }}
+          </ul>
+        </div>
+      {{ end }}
     {{ end }}
   </div>
-
-  <!-- pagination -->
-  {{ if $paginator.HasNext }}
-    <div class="flex items-center justify-end gap-6 w-full mt-12 pr-4 pb-4">
-      {{ if $paginator.HasPrev }}
-        <a
-          href="{{ $paginator.Prev.URL }}"
-          class="text-lg hover:opacity-70 transition-opacity">
-          &lt;
-        </a>
-      {{ else }}
-        <span class="text-lg opacity-30 cursor-not-allowed"> &lt; </span>
-      {{ end }}
-      <span class="text-lg">{{ $paginator.PageNumber }}</span>
-      {{ if $paginator.HasNext }}
-        <a
-          href="{{ $paginator.Next.URL }}"
-          class="text-lg hover:opacity-70 transition-opacity">
-          &gt;
-        </a>
-      {{ else }}
-        <span class="text-lg opacity-30 cursor-not-allowed"> &gt; </span>
-      {{ end }}
-    </div>
-  {{ end }}
 {{ end }}

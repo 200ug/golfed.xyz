@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1"
+   width="546.91473"
+   height="248.33051"
+   viewBox="0 0 546.91473 248.33051"
+   sodipodi:docname="dune.svg"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.3192814"
+     inkscape:cx="306.60631"
+     inkscape:cy="224.74356"
+     inkscape:window-width="1472"
+     inkscape:window-height="894"
+     inkscape:window-x="853"
+     inkscape:window-y="1474"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g2">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="546.91473"
+       height="248.33051"
+       id="page2"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="Image"
+     id="g1"
+     transform="translate(-0.065472,-297.76598)">
+    <g
+       id="g2"
+       transform="translate(-39.530167,2.4459435)">
+      <path
+         style="fill:#ff8901;stroke:none"
+         d="m 311.44559,295.32004 c 5.13529,13.5487 15.57611,25.58355 21.00355,39.26389 14.81513,37.34277 16.15104,85.34068 -16.58685,113.82467 -18.80018,16.35735 -42.75302,21.09 -65.06666,30.63128 -20.70703,8.85429 -40.77116,20.92111 -55.16351,38.40235 -6.03867,7.3347 -12.00786,16.78228 -14.16982,26.20835 H 585.72894 C 576.41079,536.43702 569.72918,521.1614 564.40896,512.40504 549.4359,487.76142 530.76026,460.74406 503.82038,432.60464 462.06527,388.9903 434.58904,364.28323 379.71487,329.57686 356.80278,315.08561 335.54182,304.17268 311.44559,295.32004 Z"
+         id="path6"
+         sodipodi:nodetypes="cssssccsssc" />
+      <path
+         style="fill:#ffa91d;stroke:none"
+         d="M 311.44345,295.32021 C 266.66992,360.06044 243.72873,386.03996 187.33561,440.93977 160.262,467.29646 76.645513,544.18086 39.606393,543.65808 l 0.0066,-0.002 92.268817,-0.019 49.58044,0.013 c 11.30548,-30.87955 44.20781,-54.26282 73.59999,-65.91604 23.58225,-9.34977 49.12809,-15.04277 67.10042,-34.35472 16.11742,-17.31878 20.72875,-39.42124 20.61882,-62.21932 -0.066,-13.68942 -3.81664,-28.21736 -8.12559,-41.14168 -4.95641,-14.86624 -12.25181,-33.25362 -23.21249,-44.69861 z"
+         id="path5"
+         sodipodi:nodetypes="csccccsssscc"
+         inkscape:export-filename="dune.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+    </g>
+  </g>
+</svg>

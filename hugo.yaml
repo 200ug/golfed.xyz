@@ -1,6 +1,9 @@
-baseURL: https://golfed.xyz
-title: Golfed
-language: en-GB
+title: dyyni
+
+params:
+  projectsLink: https://github.com/200ug/?tab=repositories
+  footerLogo: /images/assets/dune.svg
+  footerText: Where we're going, we don't need roads.
 
 markup:
   goldmark:
@@ -12,6 +15,10 @@ markup:
   highlight:
     noClasses: false
     style: github-dark
+
+disableKinds:
+  - taxonomy
+  - term
 
 outputs:
   page:

@@ -19,38 +19,27 @@
 
   <title>
     {{ if .IsHome }}
-      golfed/index
+      {{ .Site.Title }}/index
     {{ else if eq .Section "posts" }}
-      golfed/{{ .Params.post_number }}
+      {{ .Site.Title }}/{{ .Params.post_number }}
+    {{ else if eq .Title "404 Page not found" }}
+      {{ .Site.Title }}/451
     {{ else }}
-      golfed/{{ .Title | lower }}
+      {{ .Site.Title }}/{{ .Title | lower }}
     {{ end }}
   </title>
-
-  <!-- theme persistence across pages -->
-  {{ $themePersistence := resources.Get "js/theme-persistence.js" | resources.Minify | resources.Fingerprint "sha512" }}
-  <script
-    src="{{ $themePersistence.Permalink | relURL }}"
-    integrity="{{ $themePersistence.Data.Integrity }}"></script>
 
   <link
     rel="shortcut icon"
     type="image/x-icon"
     href="{{ $.Site.Params.favicon | relURL }}" />
 
-  <!-- dark theme syntax highlighting (default) -->
-  {{ $syntaxDark := resources.Get "css/dark-syntax.css" | resources.Minify | resources.Fingerprint "sha512" }}
+  <!-- syntax highlighting -->
+  {{ $syntaxStyle := resources.Get "css/syntax.css" | resources.Minify | resources.Fingerprint "sha512" }}
   <link
     rel="stylesheet"
-    href="{{ $syntaxDark.Permalink | relURL }}"
-    integrity="{{ $syntaxDark.Data.Integrity }}" />
-
-  <!-- light theme syntax highlighting (applied when checkbox is checked) -->
-  {{ $syntaxLight := resources.Get "css/light-syntax.css" | resources.Minify | resources.Fingerprint "sha512" }}
-  <link
-    rel="stylesheet"
-    href="{{ $syntaxLight.Permalink | relURL }}"
-    integrity="{{ $syntaxLight.Data.Integrity }}" />
+    href="{{ $syntaxStyle.Permalink | relURL }}"
+    integrity="{{ $syntaxStyle.Data.Integrity }}" />
 
   <!-- custom icons -->
   <link

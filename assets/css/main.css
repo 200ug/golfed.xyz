@@ -2,106 +2,70 @@
 @source "hugo_stats.json";
 
 @font-face {
-  font-family: "UnifrakturMaguntia";
-  src: url("/fonts/UnifrakturMaguntia.woff2") format("woff2");
+  font-family: "src-code-pro";
+  src: url("/fonts/src-code-pro.woff2") format("woff2");
 }
 
 :root {
-  /* colorschemes (light/dark) */
-  --light-background: #fff;
-  --light-text: #000;
-  --light-accent: #858ba7;
-  --light-hyperlink: #008cff;
-  --light-foreground: #abb1c9;
-
-  --dark-background: #000;
-  --dark-text: #fff;
-  --dark-accent: #242f38;
-  --dark-hyperlink: #008cff;
-  --dark-foreground: #1c252d;
-
-  /* active theme variables (defaults to dark) */
-  --background: var(--dark-background);
-  --text: var(--dark-text);
-  --accent: var(--dark-accent);
-  --hyperlink: var(--dark-hyperlink);
-  --foreground: var(--dark-foreground);
-}
-
-::-webkit-scrollbar {
-  width: 0px;
-}
-
-/* light theme when checkbox is checked or data-theme is set */
-html:has(#theme-toggle:checked),
-html[data-theme="light"] {
-  --background: var(--light-background);
-  --text: var(--light-text);
-  --accent: var(--light-accent);
-  --hyperlink: var(--light-hyperlink);
-  --foreground: var(--light-foreground);
+  --col-bg: #ffffff;
+  --col-text: #111111;
+  --col-hyper-start: #f6eedf;
+  --col-hyper-end: #f3e1bf;
 }
 
 @layer base {
   body {
-    @apply bg-[var(--background)] text-[var(--text)] text-lg;
-    font-family: "Optima", "Candara", "Calibri", "Arial", sans-serif;
+    font-family: "src-code-pro", serif;
   }
 
-  header a,
-  label {
-    @apply mx-4 hover:opacity-70;
+  a {
+    @apply bg-linear-to-r from-(--col-hyper-start) to-(--col-hyper-end) bg-no-repeat hover:brightness-98;
+    background-size: 300% 50%;
+    background-position: 0% 100%;
+    transition: filter 0.2s ease;
   }
 
-  footer {
-    p {
-      @apply flex flex-wrap justify-center gap-10;
+  .article-content {
+    h1,
+    h2 {
+      @apply font-bold mt-8 mb-2;
     }
 
-    a {
-      @apply inline-block hover:opacity-70;
+    h3,
+    h4,
+    h5,
+    h6 {
+      @apply font-bold mt-8 mb-0;
     }
-  }
 
-  .page-content .wow > .grid {
-    @apply min-w-[90%];
-  }
-
-  .grid article:hover h3 {
-    @apply underline decoration-dashed underline-offset-4;
-  }
-
-  #single-article {
     h1 {
-      @apply text-3xl font-bold mt-8 mb-4;
+      @apply text-3xl;
     }
 
     h2 {
-      @apply text-2xl font-bold mt-6 mb-3;
+      @apply text-2xl;
     }
 
     h3 {
-      @apply text-xl font-bold mt-5 mb-2;
+      @apply text-xl;
     }
 
     h4 {
-      @apply text-lg font-bold mt-4 mb-2;
+      @apply text-lg;
     }
 
-    h5 {
-      @apply text-base font-bold mt-3 mb-1;
-    }
-
+    h5,
     h6 {
-      @apply text-base font-bold mt-3 mb-1;
+      @apply text-base;
+    }
+
+    p {
+      /* align left on mobile, justify on regular */
+      @apply text-left md:text-justify;
     }
 
     img {
-      @apply border-[var(--foreground)] mx-auto block py-4;
-    }
-
-    a {
-      @apply text-[var(--hyperlink)] hover:underline;
+      @apply mx-auto block py-4;
     }
 
     p,
@@ -112,19 +76,9 @@ html[data-theme="light"] {
       @apply my-6;
     }
 
-    pre {
-      @apply overflow-scroll text-base;
-      background-color: transparent !important;
-    }
-
-    code {
-      @apply p-0;
-      background-color: transparent !important;
-    }
-
     ul,
     ol {
-      @apply ml-6;
+      @apply ml-10;
     }
 
     ul li {
@@ -144,15 +98,23 @@ html[data-theme="light"] {
       @apply my-0;
     }
 
-    /* drop caps */
-    h1 + p::first-letter,
-    h2 + p::first-letter,
-    h3 + p::first-letter,
-    h4 + p::first-letter,
-    h5 + p::first-letter,
-    h6 + p::first-letter {
-      font-family: "UnifrakturMaguntia", serif;
-      @apply float-left text-5xl leading-14 pr-2;
+    code,
+    samp,
+    pre {
+      font-family: "src-code-pro", serif;
+    }
+
+    pre {
+      @apply overflow-scroll text-base bg-(--col-text) text-(--col-bg) rounded-xs px-4 py-4;
+    }
+
+    code {
+      @apply bg-(--col-text) text-(--col-bg) p-0;
+    }
+
+    p > code,
+    li > code {
+      @apply py-0.5 px-1 rounded-xs;
     }
   }
 }

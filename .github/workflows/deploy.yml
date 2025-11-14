@@ -29,14 +29,11 @@ jobs:
         run: npm ci
 
       - name: Hugo build
-        run: |
-          export HUGO_COMMIT_HASH=$(git rev-parse --short HEAD)
-          export HUGO_CACHE_BUST=$(date +%s)
-          hugo --minify --gc --baseURL "https://golfed.xyz/"
+        run: hugo --minify --gc --baseURL "https://dyyni.org/"
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy public --project-name=golfed
+          command: pages deploy public --project-name=dyyni

@@ -1,24 +1,13 @@
 {{ define "main" }}
-  <div class="w-full flex flex-col items-center justify-center py-12">
-    <div class="flex flex-col lg:flex-row items-center gap-2">
-      {{ $posts := where .Site.RegularPages "Section" "posts" }}
-      {{ $totalWords := 0 }}
-      {{ range $posts }}{{ $totalWords = add $totalWords .WordCount }}{{ end }}
-      {{ $avgReadTime := div (div $totalWords (len $posts)) 200 | math.Round }}
-
-
-      <img
-        id="stats-img"
-        src="/images/stats/kaffe.png"
-        alt="kaffe"
-        class="max-w-xs w-80 flex-shrink-0" />
-
-      <!-- content with progressive right offset -->
-      <div class="pt-8">
-        <p><b>&lt;posts&gt;</b> {{ len $posts }}</p>
-        <p class="lg:ml-6"><b>&lt;words&gt;</b> {{ $totalWords }}</p>
-        <p><b>&lt;avg_readtime&gt;</b> {{ $avgReadTime }} min</p>
-      </div>
-    </div>
+  <div class="p-6 lg:p-8 max-w-4xl mx-auto text-center italic">
+    {{ $posts := where .Site.RegularPages "Section" "posts" }}
+    {{ $totalWords := 0 }}
+    {{ range $posts }}{{ $totalWords = add $totalWords .WordCount }}{{ end }}
+    {{ $avgReadTime := div (div $totalWords (len $posts)) 200 | math.Round }}
+    <ul class="inline-block text-left mx-auto">
+      <li>posts: {{ len $posts }}</li>
+      <li>words: {{ $totalWords }}</li>
+      <li>avg. readtime: {{ $avgReadTime }} min</li>
+    </ul>
   </div>
 {{ end }}
