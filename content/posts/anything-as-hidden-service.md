@@ -34,9 +34,9 @@ To explain the concept, we'll be using following vocabulary (as per the [docs](h
 
 ![S2](/images/posts/anything-as-hidden-service/s2.svg)
 
-3. Client requests the hidden service's introduction point information from one of the hidden service directories.
-4. Client selects a random rendezvous point and informs the host about this through its introduction point.
-5. Client and host meet at the rendezvous point, get a shared key, and the rendezvous point continues relaying the messages between the client and the server (end-to-end encrypted).
+3. Client requests the hidden service's introduction point information from one of the hidden service directories (1).
+4. Client selects a random rendezvous point and informs the host about this through its introduction point (2).
+5. Client and host meet at the rendezvous point (3), get a shared key, and the rendezvous point continues relaying the messages between the client and the server (end-to-end encrypted).
 
 ![S3](/images/posts/anything-as-hidden-service/s3.svg)
 
@@ -47,6 +47,24 @@ client <-> guard <-> middle <-> rendezvous <-> middle <-> entry <-> host
 ```
 
 The key here, considering our goal of being able to accept connections even behind firewalls, are the introduction points. The server makes _outbound_ connections to these nodes and meets any clients at a rendezvous point of their choice by making _outbound_ connections.
+
+With this in mind, you can do something like set your hidden service port to 22 (or ideally something arbitrary to decrease the traffic caused by automated scanners), and direct traffic from there to localhost so that the actual SSH server receives it. Then set your local SSH config to always proxy the connection through the Tor daemon, and you're good to go.
+
+```
+# .torrc
+HiddenServiceDir <directory>
+HiddenServicePort 22 127.0.0.1:22
+```
+
+```
+# .ssh/config
+Host hidden
+    HostName example7rmattvz6dev6wr3g5kahgokzdxqnq3vp7hvnwdqzjd7qhsmkqd.onion
+    Port 52040
+    ProxyCommand nc -x 127.0.0.1:9050 %h %p
+```
+
+Beautiful, isn't it?
 
 ## Practical and not-so-practical ideas
 
